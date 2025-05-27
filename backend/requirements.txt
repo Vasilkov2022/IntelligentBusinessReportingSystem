@@ -1,0 +1,19 @@
+fastapi
+uvicorn[standard]
+SQLAlchemy
+psycopg2-binary
+pydantic
+celery[redis]
+redis
+python-dotenv
+spacy == 3.7.2
+pdfplumber
+tabula-py
+pandas
+openai>=1.0.0
+python-multipart
+beautifulsoup4
+lxml
+tqdm
+requests
+
