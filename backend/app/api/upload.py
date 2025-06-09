@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Form
 from app.services.db import SessionLocal
 from app.models.report import Report
 from app.tasks import preprocess_report
@@ -14,7 +14,7 @@ def get_db():
         db.close()
 
 @router.post('/upload')
-async def upload_report(file: UploadFile = File(...), db=Depends(get_db)):
+async def upload_report(file: UploadFile = File(...), db=Depends(get_db), prompt: str = Form(...)):
     filename = file.filename
     report = Report(filename=filename)
     db.add(report); db.commit(); db.refresh(report)
@@ -23,5 +23,10 @@ async def upload_report(file: UploadFile = File(...), db=Depends(get_db)):
     with open(path, 'wb') as f:
         shutil.copyfileobj(file.file, f)
 
-    preprocess_report.delay(report.id)
+    preprocess_report.delay(report.id, prompt.strip())
     return { 'report_id': report.id, 'status': report.status }
+
+@router.post('/upload/ask_another')
+async def ask_another(report: int, prompt: str):
+    preprocess_report(report, prompt.strip())
+    return {'report_id': report.id, 'status': report.status}
