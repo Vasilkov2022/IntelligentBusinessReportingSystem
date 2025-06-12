@@ -5,16 +5,9 @@ from ..models.report import Report
 from ..parsers import report_collection as rc
 from ..tasks import preprocess_report
 
-def create_report_and_start_task(org_id: str, report_id: str) -> int:
-    """
-    * скачивает PDF,
-    * создаёт запись Report,
-    * запускает preprocess_report в Celery,
-    * возвращает внутренний report_id.
-    """
+def create_report_and_start_task(org_id: str, report_id: str, prompt: str) -> int:
     session = SessionLocal()
     try:
-        # 1. найти URL
         reports = rc.list_reports(org_id)
         target  = next((r for r in reports if r["report_id"] == report_id), None)
         if not target:
@@ -34,7 +27,7 @@ def create_report_and_start_task(org_id: str, report_id: str) -> int:
         os.rename(pdf_path, final)
 
         # 5. тяжёлая обработка — в Celery
-        preprocess_report.delay(rep.id)
+        preprocess_report.delay(rep.id, prompt.strip())
 
         return rep.id
     finally:

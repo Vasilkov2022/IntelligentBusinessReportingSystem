@@ -1,19 +1,33 @@
-fastapi
-uvicorn[standard]
-SQLAlchemy
-psycopg2-binary
-pydantic
-celery[redis]
-redis
-python-dotenv
-spacy == 3.7.2
-pdfplumber
-tabula-py
-pandas
-openai>=1.0.0
-python-multipart
-beautifulsoup4
-lxml
-tqdm
-requests
+# ─── веб-стек ─────────────────────────────────────────
+fastapi==0.110.2            # ↓ ниже 0.111, без fastapi-cli
+uvicorn[standard]==0.30.0
 
+# ─── БД / ORM ─────────────────────────────────────────
+SQLAlchemy==2.0.31
+psycopg2-binary==2.9.9
+pydantic==2.6.4
+
+# ─── фоновые задачи и кеш ────────────────────────────
+celery==5.4.0
+redis[hiredis]>=5.0,<6.0
+python-dotenv==1.0.1
+
+# ─── NLP (остаётся) ──────────────────────────────────
+spacy==3.7.2               # тянет typer 0.9.x автоматически
+
+# ─── обработка документов ────────────────────────────
+pdfplumber==0.11.0
+tabula-py==2.9.1
+pandas==2.2.2
+
+# ─── LLM-клиент ──────────────────────────────────────
+openai>=1.0.0,<2.0.0
+
+# ─── утилиты ─────────────────────────────────────────
+python-multipart==0.0.9
+beautifulsoup4==4.12.3
+lxml==5.2.1
+tqdm==4.66.4
+requests==2.32.3
+
+certifi

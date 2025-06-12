@@ -13,6 +13,9 @@ services:
     depends_on:
       - db
       - redis
+    environment:
+      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
   worker:
     build: ./backend
     container_name: worker
@@ -24,6 +27,9 @@ services:
     depends_on:
       - redis
       - db
+    environment:
+      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
   redis:
     image: redis:7-alpine
